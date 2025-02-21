@@ -5,8 +5,10 @@
 <br>
 
 **ToDo**
-* Netty 적용해보기
-* RandomAccessFile Cache 적용해보기 
+* Client Netty or NIO 적용해보기
+* RandomAccessFile Cache 적용해보기
+* synchronized -> Reentrant Lock 으로 바꿔보기
+  
 <br>
 
 **Preview** <br>
