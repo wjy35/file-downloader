@@ -28,7 +28,7 @@ public class MultiThreadDownloader extends Downloader{
 
         executorService.shutdown();
         try {
-            if(executorService.awaitTermination(5, TimeUnit.SECONDS)){
+            if(executorService.awaitTermination(100, TimeUnit.SECONDS)){
                 executorService.shutdown();
             }
         } catch (InterruptedException e) {
