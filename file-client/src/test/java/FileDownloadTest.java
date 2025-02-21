@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.net.http.HttpClient;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileDownloadTest {
@@ -8,6 +11,8 @@ public class FileDownloadTest {
         // given
         MultiThreadDownloader multiThreadDownloader = new MultiThreadDownloader();
         SingleThreadDownloader singleThreadDownloader = new SingleThreadDownloader();
+        multiThreadDownloader.cacheForTest();
+        singleThreadDownloader.cacheForTest();
 
         // when
         long multiStart = System.currentTimeMillis();
@@ -27,5 +32,8 @@ public class FileDownloadTest {
         System.out.println("multiDuration = " + multiDuration + "ms");
         assertTrue(multiDuration<singleDuration);
         assertArrayEquals(multiDownloadData,singleDownloadData);
+
+        FileUtil.delete(multiThreadDownloader.getFilePath());
+        FileUtil.delete(singleThreadDownloader.getFilePath());
     }
 }

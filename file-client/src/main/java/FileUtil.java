@@ -10,4 +10,12 @@ public class FileUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static void delete(String filePath){
+        try {
+            Files.delete(Path.of(filePath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

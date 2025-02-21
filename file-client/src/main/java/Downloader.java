@@ -26,6 +26,11 @@ public abstract class Downloader {
         }
     }
 
+    public final void cacheForTest(){
+        for(int i=0; i<10; i++) {
+            downloadChunk(0,0);
+        }
+    }
 
     abstract public void download();
 
