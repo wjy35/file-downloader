@@ -12,17 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class DefaultFileController {
-    @Autowired
-    FileService fileService;
+    private final FileService fileService;
 
     @GetMapping("/")
-    public ResponseEntity<byte[]> read(@RequestParam long startOffset,@RequestParam int chunkSize) {
-        Chunk chunk = fileService.readDefaultFileChunk(startOffset,chunkSize);
+    public ResponseEntity<byte[]> read(@RequestParam long startOffset, @RequestParam long endOffset) {
+        Chunk chunk = fileService.readDefaultFileChunk(startOffset, endOffset);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Length", String.valueOf(chunk.getData().length));
         headers.set("Content-Type", "application/octet-stream");
-        headers.set("Content-Range", "bytes " + startOffset + "-" + (startOffset+chunk.getData().length-1) + "/" + chunk.getFileLength());
+        headers.set("Content-Range", "bytes " + startOffset + "-" + endOffset + "/" + chunk.getFileLength());
+
+        System.out.println("startOffset = " + startOffset);
+        System.out.println("endOffset = " + endOffset);
 
         return ResponseEntity
                 .status(HttpStatus.PARTIAL_CONTENT)

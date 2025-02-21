@@ -14,16 +14,18 @@ public class FileDownloadTest {
         multiThreadDownloader.download();
         long multiEnd = System.currentTimeMillis();
         long multiDuration = multiEnd-multiStart;
+        byte[] multiDownloadData = FileUtil.getAllData(multiThreadDownloader.getFilePath());
 
         long singleStart = System.currentTimeMillis();
         singleThreadDownloader.download();
         long singleEnd = System.currentTimeMillis();
         long singleDuration = singleEnd-singleStart;
+        byte[] singleDownloadData = FileUtil.getAllData(singleThreadDownloader.getFilePath());
 
         // then
         System.out.println("singleDuration = " + singleDuration + "ms");
         System.out.println("multiDuration = " + multiDuration + "ms");
         assertTrue(multiDuration<singleDuration);
-        assertArrayEquals(singleThreadDownloader.getAllData(), multiThreadDownloader.getAllData());
+        assertArrayEquals(multiDownloadData,singleDownloadData);
     }
 }

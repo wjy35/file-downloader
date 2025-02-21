@@ -9,7 +9,5 @@ import lombok.*;
 @ToString
 public class Chunk {
     byte[] data;
-    long startOffset;
-    long endOffset;
     long fileLength;
 }
