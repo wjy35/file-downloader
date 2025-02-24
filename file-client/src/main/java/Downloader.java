@@ -9,15 +9,18 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public abstract class Downloader {
-    protected static final String DOWNLOAD_DIRECTORY_PATH = System.getProperty("user.home")+"/Downloads/";
-    protected static final String BASE_URL = "http://localhost:8080/";
-    protected static final int CHUNK_SIZE = 128;
+    protected final String baseUrl;
+    protected final String requestName;
+    protected final int chunkSize;
+    protected final String filePath;
     private final HttpClient httpClient;
     protected final RandomAccessFile raf;
-    private final String filePath;
 
-    public Downloader(String name){
-        this.filePath = DOWNLOAD_DIRECTORY_PATH+name;
+    public Downloader(String baseUrl, String requestName,String savePath, String saveName, int chunkSize){
+        this.baseUrl = baseUrl;
+        this.requestName = requestName;
+        this.filePath = savePath + "/" +saveName;
+        this.chunkSize = chunkSize;
         this.httpClient = HttpClient.newHttpClient();
         try {
             raf = new RandomAccessFile(new File(filePath), "rw");
@@ -44,10 +47,9 @@ public abstract class Downloader {
 
     protected final long tryToRequestFileSize() throws URISyntaxException, IOException, InterruptedException {
         HttpRequest fileSizeRequest = HttpRequest.newBuilder()
-                .uri(new URI(BASE_URL + "file-size"))
+                .uri(new URI(baseUrl + "file-size?name="+requestName))
                 .GET()
                 .build();
-
         HttpResponse<String> fileSizeResponse = httpClient.send(fileSizeRequest, HttpResponse.BodyHandlers.ofString());
 
         return Long.parseLong(fileSizeResponse.body());
@@ -62,7 +64,7 @@ public abstract class Downloader {
     }
 
     protected final byte[] tryToDownLoadChunk(long startOffset, long endOffset) throws IOException, InterruptedException, URISyntaxException {
-        String urlWithParam = getUrlWithParam(startOffset,endOffset);
+        String urlWithParam = getUrlWithParam(startOffset, endOffset);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(urlWithParam))
@@ -77,7 +79,7 @@ public abstract class Downloader {
     protected abstract void writeChunk(byte[] data, long startOffset);
 
     protected final String getUrlWithParam(long startOffset,long endOffset){
-        return BASE_URL + "?startOffset=" + startOffset + "&endOffset="+endOffset;
+        return baseUrl +  "?name=" + requestName +"&startOffset=" + startOffset + "&endOffset="+endOffset;
     }
 
     public String getFilePath(){

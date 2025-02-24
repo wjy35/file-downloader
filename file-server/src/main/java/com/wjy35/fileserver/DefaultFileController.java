@@ -1,7 +1,6 @@
 package com.wjy35.fileserver;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +14,13 @@ public class DefaultFileController {
     private final FileService fileService;
 
     @GetMapping("/")
-    public ResponseEntity<byte[]> read(@RequestParam long startOffset, @RequestParam long endOffset) {
-        Chunk chunk = fileService.readDefaultFileChunk(startOffset, endOffset);
+    public ResponseEntity<byte[]> read(@RequestParam String name, @RequestParam long startOffset, @RequestParam long endOffset) {
+        Chunk chunk = fileService.readChunk(name,startOffset, endOffset);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Length", String.valueOf(chunk.getData().length));
         headers.set("Content-Type", "application/octet-stream");
         headers.set("Content-Range", "bytes " + startOffset + "-" + endOffset + "/" + chunk.getFileLength());
-
-        System.out.println("startOffset = " + startOffset);
-        System.out.println("endOffset = " + endOffset);
 
         return ResponseEntity
                 .status(HttpStatus.PARTIAL_CONTENT)
@@ -33,8 +29,8 @@ public class DefaultFileController {
     }
 
     @GetMapping("/file-size")
-    public ResponseEntity<Long> fileSize() {
-        long fileSize = fileService.readDefaultFileSize();
+    public ResponseEntity<Long> fileSize(@RequestParam String name) {
+        long fileSize = fileService.readFileSize(name);
 
         return ResponseEntity
                 .ok()

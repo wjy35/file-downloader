@@ -8,21 +8,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FileService {
     private final ChunkRepository chunkRepository;
-    private static final String DEFAULT_FILE_PATH = "hi.png";
+    private static final String DEFAULT_FILE_NAME = "god.png";
 
-    public long readFileSize(String path){
-        return chunkRepository.getLengthByPath(path);
+    public long readFileSize(String name){
+        return chunkRepository.getLengthByPath(name);
     }
 
-    public Chunk readChunk(String path, long startOffset,long endOffset){
-        return chunkRepository.findByPath(path,startOffset,endOffset);
+    public Chunk readChunk(String name, long startOffset,long endOffset){
+        return chunkRepository.findByPath(name,startOffset,endOffset);
     }
 
     public long readDefaultFileSize(){
-        return readFileSize(DEFAULT_FILE_PATH);
+        return readFileSize(DEFAULT_FILE_NAME);
     }
 
     public Chunk readDefaultFileChunk(long startOffset,long endOffset){
-        return readChunk(DEFAULT_FILE_PATH,startOffset,endOffset);
+        return readChunk(DEFAULT_FILE_NAME,startOffset,endOffset);
     }
 }

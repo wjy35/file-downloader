@@ -5,11 +5,12 @@ import java.util.concurrent.TimeUnit;
 
 public class MultiThreadDownloader extends Downloader{
     private final ExecutorService executorService;
-    private static final String FILE_NAME = "multi-thread.png";
     private static final int THREAD_POOL_COUNT = 4;
 
-    public MultiThreadDownloader() {
-        super(FILE_NAME);
+    public MultiThreadDownloader(String baseUrl, String requestName, String savePath, String saveName, int chunkSize) {
+        super(baseUrl, requestName, savePath, saveName, chunkSize);
+
+        // ToDo Thread Pool 효율적으로 관리
         this.executorService = Executors.newFixedThreadPool(THREAD_POOL_COUNT);
     }
 
@@ -17,10 +18,10 @@ public class MultiThreadDownloader extends Downloader{
     public void download() {
         long fileSize = requestFileSize();
 
-        for(long offset = 0; offset<fileSize; offset+=CHUNK_SIZE){
+        for(long offset = 0; offset<fileSize; offset+= chunkSize){
             final long startOffset = offset;
             executorService.execute(()->{
-                byte[] chunk = downloadChunk(startOffset,startOffset+CHUNK_SIZE);
+                byte[] chunk = downloadChunk(startOffset, startOffset+chunkSize);
 
                 writeChunk(chunk,startOffset);
             });
