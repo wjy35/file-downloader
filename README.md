@@ -1,14 +1,13 @@
 **Fix**
-* 비동기 함수가 완료되기 전 속도를 측정했던 오류 정상화
-* 테스트 코드가 반복 실행 되어도 같은 결과를 반환하도록 수정
-* Http 캐시를 테스트 전에 자동으로 수행하도록 수정
+* ExcutorService의 Thread Pool을 효율적으로 사용하도록 개선
+* RandomAccessFile Cache 적용 (성능 비교)
+<img width="388" alt="Screenshot 2025-02-26 at 4 46 25 PM" src="https://github.com/user-attachments/assets/b6b589ea-846c-4aa6-8bf5-0db03f8e753d" />
+* 반복적으로 사용할수록 JVM 역시 RandomAccessFile Instance를 캐싱해 성능이 개선됨
+* Synchronized 를 ReentrantLock으로 변경
 <br>
 
 **ToDo**
 * Client Netty or NIO 적용해보기
-* RandomAccessFile Cache 적용해보기
-* synchronized -> Reentrant Lock 으로 바꿔보기
-  
 <br>
 
 **Preview** <br>
