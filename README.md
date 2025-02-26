@@ -1,9 +1,10 @@
 **Fix**
+* Synchronized 를 ReentrantLock으로 변경
 * ExcutorService의 Thread Pool을 효율적으로 사용하도록 개선
 * RandomAccessFile Cache 적용 (성능 비교)
-<img width="388" alt="Screenshot 2025-02-26 at 4 46 25 PM" src="https://github.com/user-attachments/assets/b6b589ea-846c-4aa6-8bf5-0db03f8e753d" /><br>
-* 반복적으로 사용할수록 JVM 역시 RandomAccessFile Instance를 캐싱해 성능이 개선됨
-* Synchronized 를 ReentrantLock으로 변경
+<img width="388" alt="Screenshot 2025-02-26 at 4 46 25 PM" src="https://github.com/user-attachments/assets/b6b589ea-846c-4aa6-8bf5-0db03f8e753d" />
+<br>반복적으로 사용할수록 JVM 역시 RandomAccessFile Instance를 캐싱해 성능이 개선됨<br>
+<br>
 <br>
 
 **ToDo**
