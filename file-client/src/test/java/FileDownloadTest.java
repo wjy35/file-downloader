@@ -7,21 +7,21 @@ public class FileDownloadTest {
     void Compare_download_speed_MultiThread_vs_SingleThread(){
         // given
         String baseUrl = "http://localhost:8080/";
-        String requestName = "hi.png";
+        String requestName = "god.png";
         String savePath = System.getProperty("user.home")+"/Downloads";
         int chunkSize = 128;
         MultiThreadDownloader multiThreadDownloader = new MultiThreadDownloader(
                 baseUrl,
                 requestName,
                 savePath,
-                "multi",
+                "multi.png",
                 chunkSize
                 );
         SingleThreadDownloader singleThreadDownloader = new SingleThreadDownloader(
                 baseUrl,
                 requestName,
                 savePath,
-                "single",
+                "single.png",
                 chunkSize
         );
         multiThreadDownloader.cacheForTest();

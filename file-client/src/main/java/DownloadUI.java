@@ -74,7 +74,7 @@ public class DownloadUI {
             new MultiThreadDownloader(url, requestName, savePath, saveName, chunkSize)
                     .download();
 
-            new JToast(frame,"complete!",2);
+            new JToast(frame,"complete!",1000);
         });
         panel.add(downloadBtn, c);
 

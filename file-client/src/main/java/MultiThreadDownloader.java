@@ -1,49 +1,53 @@
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class MultiThreadDownloader extends Downloader{
-    private final ExecutorService executorService;
     private static final int THREAD_POOL_COUNT = 4;
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private final ReentrantLock lock = new ReentrantLock();
 
     public MultiThreadDownloader(String baseUrl, String requestName, String savePath, String saveName, int chunkSize) {
         super(baseUrl, requestName, savePath, saveName, chunkSize);
-
-        // ToDo Thread Pool 효율적으로 관리
-        this.executorService = Executors.newFixedThreadPool(THREAD_POOL_COUNT);
     }
 
     @Override
     public void download() {
-        long fileSize = requestFileSize();
-
-        for(long offset = 0; offset<fileSize; offset+= chunkSize){
-            final long startOffset = offset;
-            executorService.execute(()->{
-                byte[] chunk = downloadChunk(startOffset, startOffset+chunkSize);
-
-                writeChunk(chunk,startOffset);
-            });
-        }
-
-        executorService.shutdown();
         try {
-            if(executorService.awaitTermination(100, TimeUnit.SECONDS)){
-                executorService.shutdown();
-            }
+            tryToDownload();
         } catch (InterruptedException e) {
-            executorService.shutdown();
+            throw new RuntimeException(e);
         }
     }
 
-    @Override
-    protected synchronized void writeChunk(byte[] data, long startOffset) {
-        try {
-            raf.seek(startOffset);
-            raf.write(data);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private void tryToDownload() throws InterruptedException {
+        long fileSize = requestFileSize();
+        List<Callable<Void>> callableList = new ArrayList<>((int) (fileSize/chunkSize+1));
+
+        for(long offset = 0; offset<fileSize; offset+= chunkSize){
+            final long startOffset = offset;
+            callableList.add(()->{
+                byte[] chunk = downloadChunk(startOffset, startOffset+chunkSize);
+
+                writeChunk(chunk,startOffset);
+                return null;
+            });
         }
+
+        executorService.invokeAll(callableList);
+    }
+
+    @Override
+    protected void writeChunk(byte[] data, long startOffset) throws IOException {
+        lock.lock();
+
+        raf.seek(startOffset);
+        raf.write(data);
+
+        lock.unlock();
     }
 }

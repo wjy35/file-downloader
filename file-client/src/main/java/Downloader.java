@@ -76,7 +76,7 @@ public abstract class Downloader {
         return response.body();
     }
 
-    protected abstract void writeChunk(byte[] data, long startOffset);
+    protected abstract void writeChunk(byte[] data, long startOffset) throws IOException;
 
     protected final String getUrlWithParam(long startOffset,long endOffset){
         return baseUrl +  "?name=" + requestName +"&startOffset=" + startOffset + "&endOffset="+endOffset;
