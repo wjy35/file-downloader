@@ -9,6 +9,7 @@
 
 **ToDo**
 * Client Netty or NIO 적용해보기
+* 대용량 파일에서 RandomAccessFile은 생성 비용이 커짐, 캐시 성능 테스트 해보기
 <br>
 
 **Preview** <br>
