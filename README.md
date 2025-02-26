@@ -12,6 +12,8 @@
 <br>
 
 **Preview** <br>
+![god](https://github.com/user-attachments/assets/9cb28506-f098-446a-804c-1cec112b5674)
+
 ![Screenshot 2025-02-21 at 10 08 03 PM](https://github.com/user-attachments/assets/069c9d8e-9ed7-48fd-818f-bf596c9d93d5)
 
 ![Screenshot 2025-02-21 at 10 09 09 PM](https://github.com/user-attachments/assets/ac58a6f7-f3d5-4ecd-9690-27e054b256a8)
