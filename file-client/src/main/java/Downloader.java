@@ -10,14 +10,18 @@ import java.net.http.HttpResponse;
 
 public abstract class Downloader {
     protected final String baseUrl;
+    protected final String host;
+    protected final int port;
     protected final String requestName;
     protected final int chunkSize;
     protected final String filePath;
     private final HttpClient httpClient;
     protected final RandomAccessFile raf;
 
-    public Downloader(String baseUrl, String requestName,String savePath, String saveName, int chunkSize){
-        this.baseUrl = baseUrl;
+    public Downloader(String host,int port,String requestName,String savePath, String saveName, int chunkSize){
+        this.baseUrl = "http://"+host+":"+port+"/";
+        this.host = host;
+        this.port = port;
         this.requestName = requestName;
         this.filePath = savePath + "/" +saveName;
         this.chunkSize = chunkSize;
@@ -29,15 +33,10 @@ public abstract class Downloader {
         }
     }
 
-    public final void cacheForTest(){
-        for(int i=0; i<10; i++) {
-            downloadChunk(0,0);
-        }
-    }
+    public abstract void download();
+    protected abstract void writeChunk(byte[] data, long startOffset) throws IOException;
 
-    abstract public void download();
-
-    protected final long requestFileSize(){
+    protected final long fetchFileSize(){
         try {
             return tryToRequestFileSize();
         } catch (URISyntaxException | IOException | InterruptedException e) {
@@ -76,10 +75,14 @@ public abstract class Downloader {
         return response.body();
     }
 
-    protected abstract void writeChunk(byte[] data, long startOffset) throws IOException;
-
     protected final String getUrlWithParam(long startOffset,long endOffset){
         return baseUrl +  "?name=" + requestName +"&startOffset=" + startOffset + "&endOffset="+endOffset;
+    }
+
+    public final void cacheForTest(){
+        for(int i=0; i<10; i++) {
+            downloadChunk(0,0);
+        }
     }
 
     public String getFilePath(){

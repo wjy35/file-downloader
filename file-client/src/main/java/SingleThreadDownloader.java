@@ -2,13 +2,13 @@ import java.io.IOException;
 
 public class SingleThreadDownloader extends Downloader{
 
-    public SingleThreadDownloader(String baseUrl, String requestName, String savePath, String saveName, int chunkSize) {
-        super(baseUrl, requestName, savePath, saveName, chunkSize);
+    public SingleThreadDownloader(String host, int port, String requestName, String savePath, String saveName, int chunkSize) {
+        super(host, port, requestName, savePath, saveName, chunkSize);
     }
 
     @Override
     public void download() {
-        long fileSize = requestFileSize();
+        long fileSize = fetchFileSize();
 
         for(long startOffset = 0; startOffset<fileSize; startOffset+= chunkSize){
             byte[] chunk = downloadChunk(startOffset,startOffset+ chunkSize);

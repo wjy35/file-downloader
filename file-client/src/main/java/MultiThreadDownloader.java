@@ -7,12 +7,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MultiThreadDownloader extends Downloader{
-    private static final int THREAD_POOL_COUNT = 4;
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private static final int MAX_THREAD_COUNT = 4;
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(MAX_THREAD_COUNT);
     private final ReentrantLock lock = new ReentrantLock();
 
-    public MultiThreadDownloader(String baseUrl, String requestName, String savePath, String saveName, int chunkSize) {
-        super(baseUrl, requestName, savePath, saveName, chunkSize);
+    public MultiThreadDownloader(String host, int port, String requestName, String savePath, String saveName, int chunkSize) {
+        super(host, port, requestName, savePath, saveName, chunkSize);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class MultiThreadDownloader extends Downloader{
     }
 
     private void tryToDownload() throws InterruptedException {
-        long fileSize = requestFileSize();
+        long fileSize = fetchFileSize();
         List<Callable<Void>> callableList = new ArrayList<>((int) (fileSize/chunkSize+1));
 
         for(long offset = 0; offset<fileSize; offset+= chunkSize){

@@ -21,8 +21,8 @@ public class ChunkRepository {
         }
     }
 
-    private long tryToGetLengthByPath(String path) throws IOException {
-        return new ClassPathResource("static/"+path).getFile().length();
+    private long tryToGetLengthByPath(String name) throws IOException {
+        return new File("/app/resources/"+name).length();
     }
 
     public Chunk findByPath(String name,long startOffset,long endOffset){
@@ -52,7 +52,7 @@ public class ChunkRepository {
 
     private RandomAccessFile createRandomAccessFile(String name){
         try {
-            RandomAccessFile raf = new RandomAccessFile(new ClassPathResource("static/"+name).getFile(),"r");
+            RandomAccessFile raf = new RandomAccessFile(new File("/app/resources/"+name),"r");
 
             cache.save(name,raf);
 

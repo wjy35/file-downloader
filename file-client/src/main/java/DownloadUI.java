@@ -71,8 +71,10 @@ public class DownloadUI {
             String saveName = saveNameField.getText();
             int chunkSize = Integer.parseInt(endOffsetField.getText());
 
-            new MultiThreadDownloader(url, requestName, savePath, saveName, chunkSize)
-                    .download();
+            // ToDo UI 수정
+            // ToDo Multiplexing 방식으로 수정
+//            new MultiThreadDownloader(url, requestName, savePath, saveName, chunkSize)
+//                    .download();
 
             new JToast(frame,"complete!",1000);
         });
