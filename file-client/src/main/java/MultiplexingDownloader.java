@@ -16,15 +16,15 @@ public class MultiplexingDownloader extends Downloader {
     private final int MAX_THREAD_COUNT = 4;
     private final ReentrantLock lock = new ReentrantLock();
     private final Semaphore semaphore = new Semaphore(MAX_CONNECTION_COUNT);
-    private final NioEventLoopGroup group;
-    private final Bootstrap bootstrap;
     private CountDownLatch latch;
 
     public MultiplexingDownloader(String host, int port, String requestName, String savePath, String saveName, int chunkSize) {
         super(host, port, requestName, savePath, saveName, chunkSize);
+    }
 
-        group = new NioEventLoopGroup(MAX_THREAD_COUNT);
-        bootstrap = new Bootstrap();
+    private void tryToDownload() throws Exception {
+        NioEventLoopGroup group = new NioEventLoopGroup(MAX_THREAD_COUNT);
+        Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(group)
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<NioSocketChannel>() {
@@ -45,9 +45,7 @@ public class MultiplexingDownloader extends Downloader {
                         });
                     }
                 });
-    }
 
-    private void tryToDownload() throws Exception {
         long fileSize = fetchFileSize();
 
         int chunkCount = (int)fileSize/chunkSize + (fileSize%chunkSize==0 ? 0:1);

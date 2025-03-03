@@ -33,13 +33,13 @@ public class FileDownloadTest {
 
         // when
         long multiStart = System.currentTimeMillis();
-        multiThreadDownloader.download();
+        multiThreadDownloader.startDownload();
         long multiEnd = System.currentTimeMillis();
         long multiDuration = multiEnd-multiStart;
         byte[] multiDownloadData = FileUtil.getAllData(multiThreadDownloader.getFilePath());
 
         long singleStart = System.currentTimeMillis();
-        singleThreadDownloader.download();
+        singleThreadDownloader.startDownload();
         long singleEnd = System.currentTimeMillis();
         long singleDuration = singleEnd-singleStart;
         byte[] singleDownloadData = FileUtil.getAllData(singleThreadDownloader.getFilePath());
@@ -79,13 +79,13 @@ public class FileDownloadTest {
 
         // when
         long multiplexingStart = System.currentTimeMillis();
-        multiplexingDownloader.download();
+        multiplexingDownloader.startDownload();
         long multiplexingEnd = System.currentTimeMillis();
         long multiplexingDuration = multiplexingEnd-multiplexingStart;
         byte[] multiplexingData = FileUtil.getAllData(multiplexingDownloader.getFilePath());
 
         long multiThreadStart = System.currentTimeMillis();
-        multiThreadDownloader.download();
+        multiThreadDownloader.startDownload();
         long multiThreadEnd = System.currentTimeMillis();
         long multiThreadDuration = multiThreadEnd-multiThreadStart;
         byte[] multiThreadData = FileUtil.getAllData(multiThreadDownloader.getFilePath());

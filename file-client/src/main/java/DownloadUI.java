@@ -23,12 +23,19 @@ public class DownloadUI {
 
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 3;
-        JTextField urlField = createPlaceholderField("Url");
-        panel.add(urlField, c);
+        c.gridwidth = 2;
+        JTextField hostField = createPlaceholderField("Host");
+        panel.add(hostField, c);
 
+
+        c.gridx = 2;
+        c.gridy = 0;
         c.gridwidth = 1;
+        JTextField portField = createPlaceholderField("Port");
+        panel.add(portField, c);
+
         c.gridy = 1;
+        c.gridx = 0;
         JTextField requestNameField = createPlaceholderField("Request Name");
         panel.add(requestNameField, c);
 
@@ -39,6 +46,7 @@ public class DownloadUI {
         c.gridx = 2;
         JTextField endOffsetField = createPlaceholderField("Chunk Size");
         panel.add(endOffsetField, c);
+
 
         c.gridx = 0;
         c.gridy = 2;
@@ -65,16 +73,15 @@ public class DownloadUI {
         c.gridwidth = 3;
         JButton downloadBtn = new JButton("download");
         downloadBtn.addActionListener(e ->{
-            String url = urlField.getText();
+            String host = hostField.getText();
+            int port = Integer.parseInt(portField.getText());
             String requestName = requestNameField.getText();
             String savePath = savePathField.getText();
             String saveName = saveNameField.getText();
             int chunkSize = Integer.parseInt(endOffsetField.getText());
 
-            // ToDo UI 수정
-            // ToDo Multiplexing 방식으로 수정
-//            new MultiThreadDownloader(url, requestName, savePath, saveName, chunkSize)
-//                    .download();
+            new MultiplexingDownloader(host,port, requestName, savePath, saveName, chunkSize)
+                    .download();
 
             new JToast(frame,"complete!",1000);
         });

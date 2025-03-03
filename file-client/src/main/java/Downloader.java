@@ -16,8 +16,8 @@ public abstract class Downloader {
     protected final int chunkSize;
     protected final String filePath;
     private final HttpClient httpClient;
-    protected final RandomAccessFile raf;
 
+    protected RandomAccessFile raf;
     public Downloader(String host,int port,String requestName,String savePath, String saveName, int chunkSize){
         this.baseUrl = "http://"+host+":"+port+"/";
         this.host = host;
@@ -26,14 +26,19 @@ public abstract class Downloader {
         this.filePath = savePath + "/" +saveName;
         this.chunkSize = chunkSize;
         this.httpClient = HttpClient.newHttpClient();
+
+    }
+
+    public void startDownload(){
         try {
             raf = new RandomAccessFile(new File(filePath), "rw");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        download();
     }
 
-    public abstract void download();
+    protected abstract void download();
     protected abstract void writeChunk(byte[] data, long startOffset) throws IOException;
 
     protected final long fetchFileSize(){
