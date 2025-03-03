@@ -1,4 +1,8 @@
 **Fix**
+* Python을 통한 성능 테스트 시각화
+<img width="580" alt="Screenshot 2025-03-03 at 6 37 58 PM" src="https://github.com/user-attachments/assets/1eb19bc7-6d2b-4cf5-9f35-4bfccbb7c3cb" />
+<br>
+<br>
 
 * Netty를 사용해 client에 Multiplexing을 사용하도록 개선 <br>
   
@@ -16,6 +20,7 @@ sudo docker run -d \
 ![multiplexing drawio](https://github.com/user-attachments/assets/71f3b069-cc41-4f47-b795-b7b600a748ec)
 <br>
 
+* UI 수정
 
 **Challenges**
 
@@ -28,9 +33,8 @@ sudo docker run -d \
 <br>
 
 **ToDo**
-* UI 수정
 * 대용량 파일에서 RandomAccessFile은 생성 비용이 커짐, 캐시 성능 테스트 해보기
-* python을 통한 성능 테스트 시각화
+
 <br>
 
 **Preview** <br>
